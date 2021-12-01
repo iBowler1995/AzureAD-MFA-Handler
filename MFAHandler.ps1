@@ -182,17 +182,4 @@ elseif($Bulk -and $Disable){
             Write-Host "MFA successfully disabled." -ForegroundColor Green
         }
     }
-}
-
-else {
-    If ($MFAStatus -eq $True){
-        Write-Host "User $($MsolUser.DisplayName) MFA status: Enabled."
-    }
-    elseif($MFAStatus -eq $False){
-        Write-Host "User $($MsolUser.DisplayName) MFA status: Disabled."
-    }
-    else {
-        Write-Host "Unable to determine MFA status for $($MsolUser.DisplayName)."
-    }
- }
-    
+}  

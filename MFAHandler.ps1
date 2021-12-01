@@ -13,18 +13,18 @@
 	===========================================================================
 	This script is provided 'as is' without any warranty. Any issues stemming 
 	from use is on the user.
-	
-	If the Azure account you are using for this has MFA enabled, you will be prompted
-    	for credentials twice on the first run. This will cache the credentials, and thereafter
-    	you will only be prompted to login once upon running. This is unavoidabled with Microsoft's
-    	current iteration of the PowerShell module. If MFA is not enabled on the account used
-    	in this script, you will only be prompted for credentials the first time it is run on your system.
-	
-	If you start a PS session and connect to MSOnline, you will not be prompted for credentials until
-    	that sesssion ends.
-    
-    	To update cached credentials after password update find and delete .\creds.xml and run the
-    	script normally.
+
+    If the Azure account you are using for this has MFA enabled, you will be prompted
+    for credentials twice on the first run. This will cache the credentials, and thereafter
+    you will only be prompted to login once upon running. This is unavoidabled with Microsoft's
+    current iteration of the PowerShell module. If MFA is not enabled on the account used
+    in this script, you will only be prompted for credentials the first time it is run on your system.
+
+    If you start a PS session and connect to MSOnline, you will not be prompted for credentials until
+    that sesssion ends.
+
+    To update cached credentials after password update find and delete .\creds.xml and run the
+    script normally.
     ===========================================================================
     .PARAMETER UPN
     This parameter is a string and is required - specifies the target user
@@ -104,14 +104,14 @@ If ($Enable -and !$Bulk){
     catch
     {
         #Catch for errors
-        Write-Host "MFA Enable failed. Reason: $($Error[0].Exception.InnerException)" $ForegroundColor Yellow
+        Write-Host "MFA Enable failed. Reason: $($Error[0].Exception.InnerException)" -ForegroundColor Yellow
     }
     #Confirms action was successful, warns if not
     if ($MFAStatus -eq $False) {
-        Write-Host "MFA still disabled. Please try again or check the portal" $ForegroundColor Yellow
+        Write-Host "MFA still disabled. Please try again or check the portal" -ForegroundColor Yellow
     }
     else{
-        Write-Host "MFA successfully enabled." $ForegroundColor Green
+        Write-Host "MFA successfully enabled." -ForegroundColor Green
     }
 }
     
@@ -122,20 +122,20 @@ elseif ($Disable -and !$Bulk){
     }
     Catch {
         #Catch for errors
-        Write-Host "MFA Disable failed. Reason: $($Error[0].Exception.InnerException)" $ForegroundColor Yellow
+        Write-Host "MFA Disable failed. Reason: $($Error[0].Exception.InnerException)" -ForegroundColor Yellow
     }
     #Confirms action was successful, warns if not
     If ($MFAStatus -eq $True) {
-        Write-Host "MFA still enabled. Please try again or check the portal." $ForegroundColor Yellow
+        Write-Host "MFA still enabled. Please try again or check the portal." -ForegroundColor Yellow
     }
     else{
-        Write-Host "MFA successfully disabled." $ForegroundColor Green
+        Write-Host "MFA successfully disabled." -ForegroundColor Green
     }
 }
 
 #Catch in case user forgets to specify filepath
 elseif ($Bulk -and $FilePath -eq $null) {
-    Write-Host "Bulk switch used but filepath not specified. Please specify filepath or remove Bulk switch and try again." $ForegroundColor Yellow
+    Write-Host "Bulk switch used but filepath not specified. Please specify filepath or remove Bulk switch and try again." -ForegroundColor Yellow
 } 
 elseif($Bulk -and $Enable){
     $users = Get-Content $FilePath
@@ -151,14 +151,14 @@ elseif($Bulk -and $Enable){
         }
         catch{
             #Catch for errors
-            Write-Host "MFA Enable failed. Reason: $($Error[0].Exception.InnerException)" $ForegroundColor Yellow
+            Write-Host "MFA Enable failed. Reason: $($Error[0].Exception.InnerException)" -ForegroundColor Yellow
         }
         #Confirms action was successful, warns if not
         if ($MFAStatus -eq $False) {
-            Write-Host "MFA still disabled. Please try again or check the portal" $ForegroundColor Yellow
+            Write-Host "MFA still disabled. Please try again or check the portal" -ForegroundColor Yellow
         }
         else{
-            Write-Host "MFA successfully enabled for $($MsolUser.DisplayName)." $ForegroundColor Green
+            Write-Host "MFA successfully enabled for $($MsolUser.DisplayName)." -ForegroundColor Green
         }
     }
 }
@@ -172,14 +172,14 @@ elseif($Bulk -and $Disable){
         }
         Catch {
             #Catch for errors
-            Write-Host "MFA Disable failed. Reason: $($Error[0].Exception.InnerException)" $ForegroundColor Yellow
+            Write-Host "MFA Disable failed. Reason: $($Error[0].Exception.InnerException)" -ForegroundColor Yellow
         }
         #Confirms action was successful, warns if not
         If ($MFAStatus -eq $True) {
-            Write-Host "MFA still enabled. Please try again or check the portal." $ForegroundColor Yellow
+            Write-Host "MFA still enabled. Please try again or check the portal." -ForegroundColor Yellow
         }
         else{
-            Write-Host "MFA successfully disabled." $ForegroundColor Green
+            Write-Host "MFA successfully disabled." -ForegroundColor Green
         }
     }
 }

@@ -13,6 +13,15 @@
 	===========================================================================
 	This script is provided 'as is' without any warranty. Any issues stemming 
 	from use is on the user.
+	
+	If the Azure account you are using for this has MFA enabled, you will be prompted
+    	for credentials twice on the first run. This will cache the credentials, and thereafter
+    	you will only be prompted to login once upon running. This is unavoidabled with Microsoft's
+    	current iteration of the PowerShell module. If MFA is not enabled on the account used
+    	in this script, you will only be prompted for credentials the first time it is run on your system.
+
+    	To update cached credentials after password update find and delete .\creds.xml and run the
+    	script normally.
     ===========================================================================
     .PARAMETER UPN
     This parameter is a string and is required - specifies the target user

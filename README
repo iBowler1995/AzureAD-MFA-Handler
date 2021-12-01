@@ -11,6 +11,9 @@
     you will only be prompted to login once upon running. This is unavoidabled with Microsoft's
     current iteration of the PowerShell module. If MFA is not enabled on the account used
     in this script, you will only be prompted for credentials the first time it is run on your system.
+    
+    If you start a PS session and connect to MSOnline, you will not be prompted for credentials until
+    that sesssion ends.
 
     To update cached credentials after password update find and delete .\creds.xml and run the
     script normally.

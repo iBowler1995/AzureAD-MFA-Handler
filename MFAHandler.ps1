@@ -71,16 +71,21 @@ if ((Get-InstalledModule `
 $CredsExist = '.\cred.xml'        
 
 #Auto logon if credentials saved, else prompt for credentials
-If (Test-Path $CredsExist -PathType leaf){
-            $RetrieveCredentials = Import-Clixml -Path '.\cred.xml'
-            Connect-MsolService -Credential $RetrieveCredentials
-        }
+If (Connect-MsolService) {
+    Write-Host "Already connected to MSOnline. Continuing."
+}
 else{
-            $SaveCredentials = Get-Credential
-            $SaveCredentials | Export-Clixml -Path '.\cred.xml' -Force
-            $RetrieveCredentials = Import-Clixml -Path '.\cred.xml'
-            Connect-MsolService -Credential $RetrieveCredentials
-        }  
+    If (Test-Path $CredsExist -PathType leaf){
+        $RetrieveCredentials = Import-Clixml -Path '.\cred.xml'
+        Connect-MsolService -Credential $RetrieveCredentials
+    }
+    else{
+        $SaveCredentials = Get-Credential
+        $SaveCredentials | Export-Clixml -Path '.\cred.xml' -Force
+        $RetrieveCredentials = Import-Clixml -Path '.\cred.xml'
+        Connect-MsolService -Credential $RetrieveCredentials
+    }   
+}  
     
 #Looking up user
 $MsolUser = Get-MsolUser -UserPrincipalName $UPN -ErrorAction Stop

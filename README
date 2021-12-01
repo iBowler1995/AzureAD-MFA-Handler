@@ -1,0 +1,36 @@
+.DESCRIPTION
+		This script is used to clean files and folders older than x days in a specified directory
+	===========================================================================
+	IMPORTANT:
+	===========================================================================
+	This script is provided 'as is' without any warranty. Any issues stemming 
+	from use is on the user.
+
+    If the Azure account you are using for this has MFA enabled, you will be prompted
+    for credentials twice on the first run. This will cache the credentials, and thereafter
+    you will only be prompted to login once upon running. This is unavoidabled with Microsoft's
+    current iteration of the PowerShell module. If MFA is not enabled on the account used
+    in this script, you will only be prompted for credentials the first time it is run on your system.
+
+    To update cached credentials after password update find and delete .\creds.xml and run the
+    script normally.
+    ===========================================================================
+    .PARAMETER UPN
+    This parameter is a string and is required - specifies the target user
+    .PARAMETER Enable
+    This parameter is a switch - specifies that you want to enable MFA 
+    .PARAMETER Disable
+    This parameter is a switch - specifies that you want to disable MFA
+    .PARAMETER Bulk
+    This parameter is a switch - specify this if you have a bulk action to do
+    .PARAMETER FilePath
+    This parameter is a switch - required if using Bulk switch. Specifies path to txt or csv file contiaining the UPNs
+
+    .EXAMPLES
+    MFAHandler.ps1 -UPN bsmith@example.com <--- This will attempt to display MFA status for bsmith@example.com
+
+    MFAHAndler.ps1 -UPN bsmith@example.com -Enable <--- This will attempt to enable MFA for bsmith@example.com
+
+    MFAHAndler.ps1 -UPN bsmith@example.com -Disbale <--- This will attempt to disable MFA for bsmith@example.com
+
+    MFAHAndler.ps1 

@@ -85,16 +85,17 @@ else{
         $RetrieveCredentials = Import-Clixml -Path '.\cred.xml'
         Connect-MsolService -Credential $RetrieveCredentials
     }   
-}  
+}   
     
-#Looking up user
-$MsolUser = Get-MsolUser -UserPrincipalName $UPN -ErrorAction Stop
+
 #This creates a custom property that checks whether strong authentication is enforced            
 $MFAStatus = [PSCustomObject]@{
 MFAEnabled  = if ($MsolUser.StrongAuthenticationMethods) { $true } else { $false }  
 }
 
 If ($Enable -and !$Bulk){
+    #Looking up user
+    $MsolUser = Get-MsolUser -UserPrincipalName $UPN -ErrorAction Stop
     #Creates a new PSObject to obtain MFA state and places into an array
     $sa = New-Object -TypeName Microsoft.Online.Administration.StrongAuthenticationRequirement
     $sa.RelyingParty = "*"
@@ -121,6 +122,8 @@ If ($Enable -and !$Bulk){
 }
     
 elseif ($Disable -and !$Bulk){        
+    #Looking up user
+    $MsolUser = Get-MsolUser -UserPrincipalName $UPN -ErrorAction Stop
     Try {
         #Attempts to set MFA to disabled
         Set-MsolUser -UserPrincipalName $UPN -StrongAuthenticationRequirements @()
@@ -149,10 +152,11 @@ elseif($Bulk -and $Enable){
         $sa.RelyingParty = "*"
         $sa.State = "Enabled"
         $sar = @($sa)
+        $UserLookup = Get-MsolUser -UserPrincipalName $User
      
         Try{
             #Attempts to set MFA to enabled
-            Set-MsolUser -UserPrincipalName $UPN -StrongAuthenticationRequirements $sar
+            Set-MsolUser -UserPrincipalName $UserLookup.UserPrincipalName -StrongAuthenticationRequirements $sar
         }
         catch{
             #Catch for errors
@@ -163,7 +167,7 @@ elseif($Bulk -and $Enable){
             Write-Host "MFA still disabled. Please try again or check the portal" -ForegroundColor Yellow
         }
         else{
-            Write-Host "MFA successfully enabled for $($MsolUser.DisplayName)." -ForegroundColor Green
+            Write-Host "MFA successfully enabled for $($UserLookup.DisplayName)." -ForegroundColor Green
         }
     }
 }
@@ -171,9 +175,10 @@ elseif($Bulk -and $Enable){
 elseif($Bulk -and $Disable){
     $Users = Get-Content $FilePath
     foreach ($User in $Users){
+        $UserLookup = Get-MsolUser -UserPrincipalName $User
         Try {
             #Attempts to set MFA to disabled
-            Set-MsolUser -UserPrincipalName $UPN -StrongAuthenticationRequirements @()
+            Set-MsolUser -UserPrincipalName $UserLookup.UserPrincipalName -StrongAuthenticationRequirements @()
         }
         Catch {
             #Catch for errors
@@ -184,7 +189,7 @@ elseif($Bulk -and $Disable){
             Write-Host "MFA still enabled. Please try again or check the portal." -ForegroundColor Yellow
         }
         else{
-            Write-Host "MFA successfully disabled." -ForegroundColor Green
+            Write-Host "MFA successfully disabled for $($UserLookup.DisplayName)" -ForegroundColor Green
         }
     }
-}  
+}    
